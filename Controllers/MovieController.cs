@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace MovieApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class MovieController : ControllerBase
     {
         private readonly ILogger<MovieController> _logger;
