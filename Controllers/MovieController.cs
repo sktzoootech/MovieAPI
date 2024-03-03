@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace MovieApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class MovieController : ControllerBase
     {
         private readonly ILogger<MovieController> _logger;
@@ -85,32 +85,40 @@ namespace MovieApi.Controllers
                 {
                     HttpResponseMessage cinemaWorldResponse = await client.GetAsync(cinemaWorldBaseUrl + "movie/" + movieID);
 
-                    string cinemaWorldJson = cinemaWorldResponse.Content.ReadAsStringAsync().Result;
-                    
-                    Movie movie = JsonConvert.DeserializeObject<Movie>(cinemaWorldJson);
-
-                    if (cheapestPriceSoFar > float.Parse(movie.Price))
+                    if(cinemaWorldResponse.IsSuccessStatusCode) 
                     {
-                        cheapestPriceSoFar = float.Parse(movie.Price);
-                        cheapestPriceMovie = new Movie();
-                        cheapestPriceMovie = apiHelper.DeepClone(movie);
-                    }                    
+                        string cinemaWorldJson = cinemaWorldResponse.Content.ReadAsStringAsync().Result;
+                        
+                        Movie movie = JsonConvert.DeserializeObject<Movie>(cinemaWorldJson);
+
+                        if (cheapestPriceSoFar > float.Parse(movie.Price))
+                        {
+                            cheapestPriceSoFar = float.Parse(movie.Price);
+                            cheapestPriceMovie = new Movie();
+                            cheapestPriceMovie = apiHelper.DeepClone(movie);
+                        } 
+                    }
                 } else {
                     HttpResponseMessage filmWorldResponse = await client.GetAsync(filmWorldBaseUrl + "movie/" + movieID);
 
-                    string filmWorldJson = filmWorldResponse.Content.ReadAsStringAsync().Result;
-                    
-                    Movie movie = JsonConvert.DeserializeObject<Movie>(filmWorldJson);
-
-                    if (cheapestPriceSoFar > float.Parse(movie.Price))
+                    if(filmWorldResponse.IsSuccessStatusCode)
                     {
-                        cheapestPriceSoFar = float.Parse(movie.Price);
-                        cheapestPriceMovie = new Movie();
-                        cheapestPriceMovie = apiHelper.DeepClone(movie);
-                    }  
+                        string filmWorldJson = filmWorldResponse.Content.ReadAsStringAsync().Result;
+                        
+                        Movie movie = JsonConvert.DeserializeObject<Movie>(filmWorldJson);
+
+                        if (cheapestPriceSoFar > float.Parse(movie.Price))
+                        {
+                            cheapestPriceSoFar = float.Parse(movie.Price);
+                            cheapestPriceMovie = new Movie();
+                            cheapestPriceMovie = apiHelper.DeepClone(movie);
+                        }
+                    }
                 }                
             }
 
+            if (cheapestPriceSoFar  == float.MaxValue) 
+                return StatusCode(StatusCodes.Status500InternalServerError);
             return Ok(cheapestPriceMovie);
         }
     }
