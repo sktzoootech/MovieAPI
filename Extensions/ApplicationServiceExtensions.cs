@@ -15,7 +15,7 @@ namespace MovieApi.Extensions
             services.AddSwaggerGen();
             services.AddCors(opt => {
                 opt.AddPolicy("CorsPolicy", policy => {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://170.64.165.233");
                 });
             });
 
