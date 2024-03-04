@@ -21,3 +21,13 @@ There are 2 end points that are managed by this backend.  One for the list of ag
 ## Some Assumptions
 
 The providers are assumed to be third party those the consistency of, for example, titles are not guarranteed. For example, one might have the title as "Phantom Manace" but the other will have the title as "The Phantom Manace". Both titles are the same movie and to identify that they are the same movie, LevenshteinDistance algorithm was used.  The same strategy was use to match the movies from the 2 different providers.  Initially, the implementation was done in the backend but that requires more than one requests from the front end. So to limit the number of requests, a lists was aggregated that contains list from both CinemaWorld and Filmworld. I decided to implement the movie matching using LevenshteinDistance in the frontend.
+
+## Technology Stack
+
+This backend includes the following technology stack:
+
+* .Net Core WebApi Only Controllers without Views
+* Docker and Docker-Compose for easy deployment
+* Nginx Web Server
+* Linux 22.04
+* Polly (package used to managed  retries, timeouts etc.)
